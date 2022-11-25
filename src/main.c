@@ -30,6 +30,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "devices/rtc-goldfish.h"
 #include "devices/pci-bus.h"
 #include "devices/nvme.h"
+#include "devices/ata.h"
 #include "devices/eth-oc.h"
 #include "devices/i2c-oc.h"
 
@@ -233,7 +234,7 @@ static int rvvm_main(int argc, const char** argv)
         } else if (cmp_arg(arg_name, "k") || cmp_arg(arg_name, "kernel")) {
             success = success && rvvm_load_kernel(machine, arg_val);
         } else if (cmp_arg(arg_name, "i") || cmp_arg(arg_name, "image")) {
-            success = success && nvme_init_auto(machine, arg_val, true);
+            ata_init_auto(machine, arg_val, true);
         } else if (cmp_arg(arg_name, "cmdline")) {
             rvvm_cmdline_set(machine, arg_val);
         } else if (cmp_arg(arg_name, "append")) {
