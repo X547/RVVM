@@ -176,6 +176,7 @@ public:
     virtual ~Window();
 
     bool QuitRequested() override;
+    void DispatchMessage(BMessage *msg, BHandler *target) override;
 
     View *GetView() {return fView;}
 };
@@ -265,6 +266,18 @@ bool Window::QuitRequested()
 {
     rvvm_reset_machine(fView->GetData()->machine, false);
     return false;
+}
+
+void Window::DispatchMessage(BMessage *msg, BHandler *target)
+{
+    switch (msg->what) {
+    case B_KEY_DOWN:
+    case B_UNMAPPED_KEY_DOWN:
+        // Do not use built-in shortcut handling.
+        target->MessageReceived(msg);
+        return;
+    }
+    BWindow::DispatchMessage(msg, target);
 }
 
 static thread_id sAppThread = B_ERROR;
